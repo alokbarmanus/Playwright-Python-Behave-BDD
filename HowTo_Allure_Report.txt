@@ -1,0 +1,33 @@
+# How to Generate and Open Allure Report
+
+1. **Run your Behave tests with Allure formatter:**
+   (Make sure you are in your project directory)
+   
+   ```
+   behave -f allure_behave.formatter:AllureFormatter -o allure-results
+   ```
+
+2. **Open Command Prompt in your project directory:**
+   - Navigate to your project folder:
+     D:\source\repositories\placeholder\Playwright-Python-Behave-BDD
+   - You can do this by right-clicking in the folder and selecting "Open in Terminal" or "Open Command Prompt Here".
+
+3. **Generate the Allure HTML report:**
+   
+   ```
+   allure generate allure-results -o allure-report --clean
+   ```
+
+4. **Open the Allure report in your browser:**
+   
+   ```
+   allure open allure-report
+   ```
+
+5. **View the interactive report:**
+   - Your default browser will open the Allure report automatically.
+
+---
+**Note:**
+- Always run the above commands from your project directory (where allure-results is present).
+- If you do not see the report, check that allure-results contains .json files after your test run.

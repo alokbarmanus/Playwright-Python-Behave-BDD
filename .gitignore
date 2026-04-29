@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# VSCode
+.vscode/
+
+# Allure and Behave reports
+allure-results/
+allure-report/
+behave-report.html
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test artifacts
+test-output/
+
+# Misc
+*.swp
+*.swo
+
+# Node (if any)
+node_modules/

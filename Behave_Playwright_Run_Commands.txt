@@ -1,0 +1,53 @@
+# Behave + Playwright Run Commands Cheat Sheet
+
+## 1. Basic Command
+Run all tests sequentially (default environment):
+```
+behave
+```
+
+## 2. Run with Specific Environment (dev/sit/uat)
+```
+behave -D ENV=dev
+behave -D ENV=sit
+behave -D ENV=uat
+```
+
+## 3. Run with Allure Report
+```
+behave -f allure_behave.formatter:AllureFormatter -o allure-results
+```
+
+## 4. Run with HTML Report (built-in)
+```
+behave -f html -o behave-report.html
+```
+
+## 5. Run with Tag (e.g., regression)
+```
+behave --tags=@regression
+```
+
+## 6. Run in Parallel (4 processes, scenario-level)
+1. Install behave-parallel
+pip install behave-parallel
+Then use:
+```
+behave --processes 4 --parallel-element scenario
+```
+
+## 7. Full Example: Parallel, UAT, Allure Report, Regression Tag
+```
+behave -D ENV=uat --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results --processes 4 --parallel-element scenario
+```
+For sequential execution (standard Behave, no parallelism), simply remove the --processes and --parallel-element options:
+behave -D ENV=uat --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results
+
+## 8. Generate and Open Allure Report (after test run)
+```
+allure generate allure-results -o allure-report --clean
+allure open allure-report
+```
+
+---
+**Tip:** Always run commands from your project directory.
