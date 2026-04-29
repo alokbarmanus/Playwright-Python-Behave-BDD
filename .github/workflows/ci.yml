@@ -33,7 +33,6 @@ jobs:
     strategy:
       matrix:
         env: [dev, sit, uat]
-        execution: [sequential, parallel]
         platform: [ubuntu-latest, windows-latest, macos-latest]
         browser: [chromium, firefox, webkit]
     steps:
@@ -51,20 +50,11 @@ jobs:
       - name: Install Playwright Browsers
         run: |
           python -m playwright install --with-deps
-      - name: Run Behave Tests
-        env:
-          ENV: ${{ matrix.env }}
+      - name: Run Automation Script
         run: |
-          if [ "${{ matrix.execution }}" = "parallel" ]; then
-            behave -D ENV=${{ matrix.env }} --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results --processes 4 --parallel-element scenario
-          else
-            behave -D ENV=${{ matrix.env }} --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results
-          fi
-      - name: Generate Allure Report
-        run: |
-          allure generate allure-results -o allure-report --clean
+          ./run_automation.bat ${{ matrix.env }}
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.platform }}-${{ matrix.env }}-${{ matrix.execution }}-${{ matrix.browser }}
+          name: allure-report-${{ matrix.platform }}-${{ matrix.env }}-${{ matrix.browser }}
           path: allure-report
