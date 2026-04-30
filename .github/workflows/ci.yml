@@ -56,6 +56,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install allure-behave
+          pip install behave-html-formatter
       - name: Install Playwright Browsers
         run: |
           python -m playwright install --with-deps
@@ -82,22 +83,34 @@ jobs:
         run: |
           chmod +x ./run_automation.sh
           ./run_automation.sh ${{ matrix.env }}
+          behave -f behave_html_formatter:HTMLFormatter -o behave-report.html
       - name: Run Automation Script (Windows)
         if: runner.os == 'Windows'
         env:
           HEADLESS: "true"
         run: |
           .\run_automation.bat ${{ matrix.env }}
-      - name: Deploy Allure Report to GitHub Pages
+          behave -f behave_html_formatter:HTMLFormatter -o behave-report.html
+      - name: Prepare Behave HTML Report for History
+        run: |
+          mkdir -p gh-pages-history/run-${{ github.run_number }}
+          cp behave-report.html gh-pages-history/run-${{ github.run_number }}/index.html
+      - name: Prepare Allure and Behave HTML Reports for History
+        run: |
+          mkdir -p gh-pages-history/run-allure-report-${{ github.run_number }}
+          mkdir -p gh-pages-history/run-behave-report-${{ github.run_number }}
+          cp -r allure-report/* gh-pages-history/run-allure-report-${{ github.run_number }}/
+          cp behave-report.html gh-pages-history/run-behave-report-${{ github.run_number }}/index.html
+      - name: Deploy Behave HTML Report History to GitHub Pages
         if: github.ref == 'refs/heads/main' # Only deploy from main branch (optional, adjust as needed)
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
+          publish_dir: ./gh-pages-history
           publish_branch: gh-pages
-          force_orphan: true
-      - name: Upload Allure Report Artifact
+          force_orphan: false
+      - name: Upload Behave HTML Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.platform }}-${{ matrix.env }}-${{ matrix.browser }}
-          path: allure-report
+          name: behave-html-report
+          path: behave-report.html

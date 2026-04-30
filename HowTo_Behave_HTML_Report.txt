@@ -1,0 +1,30 @@
+# How to Generate Behave HTML Report
+
+1. **Install the Behave HTML Formatter**
+   
+   Run this command in your terminal:
+   
+   pip install behave-html-formatter
+
+2. **Run Behave with the HTML Formatter**
+   
+   Use this command to generate the HTML report:
+   
+   behave -f behave_html_formatter:HTMLFormatter -o behave-report.html
+
+   - This will run your tests and create a file named `behave-report.html` in your current directory.
+
+3. **Open the HTML Report**
+   
+   - Find the file `behave-report.html` in your project folder.
+   - Double-click it or open it in any web browser to view your test results.
+
+4. **Share the Report**
+   
+   - You can send the `behave-report.html` file to anyone. No special tools are needed to view it.
+
+---
+
+**Tip:**
+- You can add this command to your automation scripts or CI workflow to always generate the HTML report automatically.
+- For more advanced reporting, you can use Allure, but the HTML report is the simplest and most portable option for sharing.
