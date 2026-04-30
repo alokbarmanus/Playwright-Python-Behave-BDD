@@ -1,0 +1,1 @@
+Checking if welcome message is visible on dashboard

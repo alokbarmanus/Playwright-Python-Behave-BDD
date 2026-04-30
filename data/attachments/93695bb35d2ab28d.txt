@@ -1,0 +1,1 @@
+Invalid credentials message is displayed and verified.

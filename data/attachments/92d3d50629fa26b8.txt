@@ -1,0 +1,1 @@
+Welcome message is visible on dashboard
