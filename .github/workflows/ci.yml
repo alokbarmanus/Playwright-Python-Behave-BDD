@@ -59,6 +59,22 @@ jobs:
       - name: Install Playwright Browsers
         run: |
           python -m playwright install --with-deps
+
+      - name: Install Allure CLI (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-jre wget
+          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure_2.27.0-1_all.deb
+          sudo dpkg -i allure_2.27.0-1_all.deb
+          allure --version
+
+      - name: Install Allure CLI (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install allure.commandline --version=2.27.0 -y
+          refreshenv
+          allure --version
       - name: Run Automation Script (Linux/macOS)
         if: runner.os != 'Windows'
         env:
