@@ -4,13 +4,46 @@ on:
   push:
     branches:
       - '**'
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment to run tests (dev, sit, uat)'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - sit
+          - uat
+      platform:
+        description: 'Platform to run tests (ubuntu-latest, windows-latest, macos-latest)'
+        required: true
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      browser:
+        description: 'Browser to run tests (chromium, firefox, webkit)'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - edge
+          - chrome
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        platform: [ubuntu-latest, windows-latest, macos-latest]
+        env: [dev]
+        platform: [ubuntu-latest]
+        browser: [chromium]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,44 +60,44 @@ jobs:
         run: |
           python -m playwright install --with-deps
 
-  test:
-    needs: build
-    runs-on: ${{ matrix.platform }}
-    strategy:
-      matrix:
-        env: [dev, sit, uat]
-        execution: [sequential, parallel]
-        platform: [ubuntu-latest, windows-latest, macos-latest]
-        browser: [chromium, firefox, webkit]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
+      - name: Install Allure CLI (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install allure-behave
-      - name: Install Playwright Browsers
+          sudo apt-get update
+          sudo apt-get install -y default-jre wget
+          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure_2.27.0-1_all.deb
+          sudo dpkg -i allure_2.27.0-1_all.deb
+          allure --version
+
+      - name: Install Allure CLI (Windows)
+        if: runner.os == 'Windows'
         run: |
-          python -m playwright install --with-deps
-      - name: Run Behave Tests
+          choco install allure.commandline --version=2.27.0 -y
+          refreshenv
+          allure --version
+      - name: Run Automation Script (Linux/macOS)
+        if: runner.os != 'Windows'
         env:
-          ENV: ${{ matrix.env }}
+          HEADLESS: "true"
         run: |
-          if [ "${{ matrix.execution }}" = "parallel" ]; then
-            behave -D ENV=${{ matrix.env }} --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results --processes 4 --parallel-element scenario
-          else
-            behave -D ENV=${{ matrix.env }} --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results
-          fi
-      - name: Generate Allure Report
+          chmod +x ./run_automation.sh
+          ./run_automation.sh ${{ matrix.env }}
+      - name: Run Automation Script (Windows)
+        if: runner.os == 'Windows'
+        env:
+          HEADLESS: "true"
         run: |
-          allure generate allure-results -o allure-report --clean
+          .\run_automation.bat ${{ matrix.env }}
+      - name: Deploy Allure Report to GitHub Pages
+        if: github.ref == 'refs/heads/main' # Only deploy from main branch (optional, adjust as needed)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
+          force_orphan: true
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.platform }}-${{ matrix.env }}-${{ matrix.execution }}-${{ matrix.browser }}
+          name: allure-report-${{ matrix.platform }}-${{ matrix.env }}-${{ matrix.browser }}
           path: allure-report
