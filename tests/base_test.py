@@ -9,7 +9,9 @@ class BaseTest:
         config.read(os.path.join('configs', 'application.properties'))
         section = 'Application'
         browser_type = config.get(section, 'browser', fallback='chromium')
-        self.browser = getattr(self.playwright, browser_type).launch(headless=False)
+        # Use headless mode in CI (when HEADLESS env var is set to 'true'), headed locally
+        headless = os.environ.get('HEADLESS', 'false').lower() == 'true'
+        self.browser = getattr(self.playwright, browser_type).launch(headless=headless)
 
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
