@@ -9,8 +9,8 @@ env_arg=${1:-dev}
 export ENV="$env_arg"
 echo "Running tests in ENV: $ENV"
 
-# Run Behave with Allure formatter, parallel execution, and no capture
-behave -D ENV=$ENV --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results --processes 4 --parallel-element scenario
+# Run Behave with Allure formatter, sequential execution, and no capture
+behave -D ENV=$ENV --tags=@regression --no-capture -f allure_behave.formatter:AllureFormatter -o allure-results
 
 # Generate Allure HTML report (requires Allure CLI installed)
 allure generate allure-results -o allure-report --clean
