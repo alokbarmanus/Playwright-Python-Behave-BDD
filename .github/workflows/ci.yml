@@ -88,6 +88,14 @@ jobs:
           HEADLESS: "true"
         run: |
           .\run_automation.bat ${{ matrix.env }}
+      - name: Deploy Allure Report to GitHub Pages
+        if: github.ref == 'refs/heads/main' # Only deploy from main branch (optional, adjust as needed)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          publish_branch: gh-pages
+          force_orphan: true
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
