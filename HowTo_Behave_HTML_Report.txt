@@ -23,7 +23,13 @@
    
    - You can send the `behave-report.html` file to anyone. No special tools are needed to view it.
 
----
+5. To see the report in GutHub Pages
+   GitHub Page for Allure Report:
+   https://alokbarmanus.github.io/Playwright-Python-Behave-BDD
+   Behave HTML Report
+   https://alokbarmanus.github.io/Playwright-Python-Behave-BDD/run-behave-report-12/
+   Allure Report
+   https://alokbarmanus.github.io/Playwright-Python-Behave-BDD/run-allure-report-12/
 
 **Tip:**
 - You can add this command to your automation scripts or CI workflow to always generate the HTML report automatically.
