@@ -1,8 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Thu Apr 30 04:39:40 UTC 2026","Thu Apr 30 04:39:56 UTC 2026","15954","","","","","","Login Page 05: Unsuccessful login with invalid credentials",""
-"passed","Thu Apr 30 04:39:29 UTC 2026","Thu Apr 30 04:39:40 UTC 2026","11046","","","","","","LoginPage 04: Successful login using nested Json Data",""
-"passed","Thu Apr 30 04:38:30 UTC 2026","Thu Apr 30 04:38:41 UTC 2026","11584","","","","","","Dashboard 01: Dashboard is displayed after successful login",""
-"passed","Thu Apr 30 04:39:06 UTC 2026","Thu Apr 30 04:39:18 UTC 2026","11833","","","","","","LoginPage 02: Successful login using static Data from feature file",""
-"passed","Thu Apr 30 04:38:41 UTC 2026","Thu Apr 30 04:38:53 UTC 2026","12079","","","","","","Dashboard 02: Welcome message is visible on dashboard",""
-"passed","Thu Apr 30 04:38:53 UTC 2026","Thu Apr 30 04:39:06 UTC 2026","12727","","","","","","LoginPage 01: Successful login with valid credentials",""
-"passed","Thu Apr 30 04:39:18 UTC 2026","Thu Apr 30 04:39:29 UTC 2026","11023","","","","","","LoginPage 03: Successful login using Json Plain Data",""
