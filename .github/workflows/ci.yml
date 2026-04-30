@@ -59,9 +59,15 @@ jobs:
       - name: Install Playwright Browsers
         run: |
           python -m playwright install --with-deps
-      - name: Run Automation Script
+      - name: Run Automation Script (Linux/macOS)
+        if: runner.os != 'Windows'
         run: |
-          ./run_automation.bat ${{ matrix.env }}
+          chmod +x ./run_automation.sh
+          ./run_automation.sh ${{ matrix.env }}
+      - name: Run Automation Script (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          .\run_automation.bat ${{ matrix.env }}
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
